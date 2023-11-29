@@ -11,33 +11,45 @@
 
 // Constants
 const appID = "app";
-const headingText = "To do. To done. ✅";
-
 // DOM Elements
 let appContainer = document.getElementById(appID);
 
-//
-// Functions
-//
+const inputBox = document.getElementById("input-box");
+const listContainer = document.getElementById("list-container");
 
-// Add a heading to the app container
-function inititialise() {
-  // If anything is wrong with the app container then end
-  if (!appContainer) {
-    console.error("Error: Could not find app contianer");
-    return;
-  }
-
-  // Create an h1 and add it to our app
-  const h1 = document.createElement("h1");
-  h1.innerText = headingText;
-  appContainer.appendChild(h1);
-
-  // Init complete
-  console.log("App successfully initialised");
+function addTask(){
+if (inputBox.value === '') {
+alert("You must write something!");
 }
 
-//
-// Inits & Event Listeners
-//
-inititialise();
+else{
+let li = document.createElement("li");
+li.innerHTML = inputBox.value;
+listContainer.appendChild(li);
+let span = document.createElement("SPAN");
+span.innerHTML = "\u00D7";
+li.appendChild(span);
+}
+inputBox.value = "";
+saveData();
+}
+
+listContainer.addEventListener('click', function(ev) {
+if (ev.target.tagName === 'LI') {
+ev.target.classList.toggle('checked');
+saveData();
+} 
+else if (ev.target.tagName === 'SPAN') {
+  ev.target.parentElement.remove();
+  saveData();
+}
+}, false);
+
+function saveData(){
+localStorage.setItem("listContainer", listContainer.innerHTML);
+}
+
+function showlist(){
+listContainer.innerHTML = localStorage.getItem("listContainer");
+}
+showlist();
